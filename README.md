@@ -9,9 +9,11 @@ export file and then retrieves this file by SFTP.
 
 # Requirements
 
-The utility requires Python 2 and [Paramiko](http://www.paramiko.org/) module.
+The utility requires:
+  * [Python](https://www.python.org/) 2.6 or later;
+  * [Paramiko](https://www.paramiko.org/) 2.3 or later.
 
 # License
 
-The utility is licensed under MIT license. For details please see LICENSE.
+This software is licensed under MIT license. Please, see file [LICENSE](LICENSE).
 
