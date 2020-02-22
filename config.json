@@ -1,0 +1,17 @@
+{
+  "routers": [
+    {"name"    : "router1",
+     "hostname": "router1.example.net",
+     "port"    : 22,
+     "username": "user1",
+     "password": "password1"
+    },
+    {"name"    : "router2",
+     "hostname": "router2.example.net",
+     "port"    : 2223,
+     "username": "user2",
+     "password": "password2"
+    }
+  ]
+}
+
