@@ -44,11 +44,16 @@ def main():
     e.pinfoc("Info: Backing up configuration of '%s'... " % rtr['name'])
     local_exp_file = "/tmp/" + rtr['name'] + ".rsc"
 
-    ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
-    ros.login(rtr['username'], rtr['password'])
-    ros.make_export()
-    ros.get_export(local_exp_file)
-    ros.close()
+    try:
+      ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
+      ros.login(rtr['username'], rtr['password'])
+      ros.make_export()
+      ros.get_export(local_exp_file)
+      ros.close()
+    except Exception as err:
+      e.pinfo("Fail.")
+      e.perror("Error: Cannot get configuration: %s" % str(err))
+      continue
 
     e.pinfo("Done.")
 
