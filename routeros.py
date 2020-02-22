@@ -38,6 +38,8 @@ class SecureTransport:
   def make_export(self):
     "Execute command to create export file"
     self.ssh = self.pt.open_session()
+    # Export only non-default configuration and hide secrets (i.e. passwords)
+    # See https://wiki.mikrotik.com/wiki/Manual:Configuration_Management
     self.ssh.exec_command('/export file=today hide-sensitive compact')
     # wait for the export command to complete
     while True:
