@@ -4,6 +4,9 @@
     "MRCB",
     "Mikro",
     "Sotirov",
+    "perror",
+    "pinfo",
+    "pinfoc",
     "sftp"
   ]
 }
