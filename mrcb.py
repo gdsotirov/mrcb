@@ -22,13 +22,22 @@
 # SOFTWARE.
 #
 
-import datetime, json, os, sys
+import datetime, filecmp, glob, json, os, sys
 import error as e, routeros
 
 # Default configuration file location
 MRCB_CONFIG = "config.json"
 # Default backup directory
 DEF_BACKUPDIR = './backup'
+
+def get_latest_export(pattern):
+  "Get name of latest export file by change time"
+  files = glob.glob(DEF_BACKUPDIR + "/" + pattern)
+  if files:
+    # TODO: What if old export was changed recently?
+    return max(files, key=os.path.getctime)
+  else:
+    return ''
 
 def main():
   # Open configuration file
@@ -67,10 +76,11 @@ def main():
     e.perror("No routers configured! Please, fix your configuration.")
     return 5
 
-  # Loop routers and dump configuration
+  # Loop routers
   for rtr in cfg['routers']:
     e.pinfos("Backing up configuration of '%s'... " % rtr['name'])
 
+    # export configuration
     try:
       ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
       ros.login(rtr['username'], rtr['password'])
@@ -78,6 +88,8 @@ def main():
       today = datetime.datetime.now()
       today_str = today.strftime("%Y%m%d-%H%M%S")
       local_exp_file = cfg['backup_dir'] + "/" + rtr['name'] + "_" + today_str + ".rsc"
+      # get last export before new one is downloaded
+      last_exp_file = get_latest_export(rtr['name'] + "_*.rsc")
       # TODO: Get remote file datetime?
       ros.get_export(local_exp_file)
       ros.close()
@@ -86,7 +98,15 @@ def main():
       e.perror("Cannot get configuration: %s" % str(err))
       continue
 
-    e.pinfoe("Done.")
+    # compare with last configuration export if any
+    if last_exp_file:
+      # TODO: Find way to exclude first line with export date and time
+      if filecmp.cmp(last_exp_file, local_exp_file, shallow=False):
+        e.pinfo("Kept (%s)." % last_exp_file)
+        os.remove(last_exp_file)
+        continue
+
+    e.pinfoe("Done (%s)." % local_exp_file)
 
 exit(main())
 
