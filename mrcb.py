@@ -28,18 +28,23 @@ import error as e, routeros
 MRCB_CONFIG = "config.json"
 
 def main():
+  # Open configuration file
   try:
     cfg_file = open(MRCB_CONFIG, "r")
   except Exception as err:
     e.perror("Error: Cannot open configuration file '%s': %s" % (MRCB_CONFIG, str(err)))
     return 1
 
+  # Load configuration
   try:
     cfg = json.load(cfg_file)
   except Exception as err:
     e.perror("Error: Cannot read configuration: %s" % str(err))
     return 2
 
+  cfg_file.close()
+
+  # Loop routers and dump configuration
   for rtr in cfg['routers']:
     e.pinfoc("Info: Backing up configuration of '%s'... " % rtr['name'])
     local_exp_file = "/tmp/" + rtr['name'] + ".rsc"
