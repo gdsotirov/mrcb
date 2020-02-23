@@ -25,7 +25,10 @@
 import datetime, json, os, sys
 import error as e, routeros
 
+# Default configuration file location
 MRCB_CONFIG = "config.json"
+# Default backup directory
+DEF_BACKUPDIR = './backup'
 
 def main():
   # Open configuration file
@@ -44,6 +47,10 @@ def main():
 
   cfg_file.close()
 
+  if not cfg.get('backup_dir'):
+    e.pinfo("Warning: Using default backup directory '%s'. Please, check your configuration." % DEF_BACKUPDIR)
+    cfg['backup_dir'] = DEF_BACKUPDIR
+
   # Check if backup directory exist and try to create it
   if not os.path.exists(cfg['backup_dir']):
     try:
@@ -55,6 +62,10 @@ def main():
   elif not os.path.isdir(cfg['backup_dir']):
     e.perror("Error: Path '%s' set as 'backup_dir' is not a directory!" % cfg['backup_dir'])
     return 4
+
+  if not cfg.get('routers'):
+    e.perror("Error: No routers configured! Please, fix your configuration.")
+    return 5
 
   # Loop routers and dump configuration
   for rtr in cfg['routers']:
