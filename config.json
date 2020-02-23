@@ -1,4 +1,5 @@
 {
+  "backup_dir": "./backup",
   "routers": [
     {"name"    : "router1",
      "hostname": "router1.example.net",
