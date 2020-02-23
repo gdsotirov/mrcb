@@ -4,11 +4,12 @@
     "MRCB",
     "Mikro",
     "Sotirov",
+    "filecmp",
     "paramiko",
     "perror",
     "pinfo",
-    "pinfos",
     "pinfoe",
+    "pinfos",
     "pwarn",
     "sftp",
     "strftime"
