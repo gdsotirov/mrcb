@@ -48,7 +48,7 @@ def main():
   cfg_file.close()
 
   if not cfg.get('backup_dir'):
-    e.pinfo("Warning: Using default backup directory '%s'. Please, check your configuration." % DEF_BACKUPDIR)
+    e.pwarn("Warning: Using default backup directory '%s'. Please, check your configuration." % DEF_BACKUPDIR)
     cfg['backup_dir'] = DEF_BACKUPDIR
 
   # Check if backup directory exist and try to create it
