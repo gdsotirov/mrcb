@@ -88,5 +88,5 @@ def main():
 
     e.pinfo("Done.")
 
-main()
+exit(main())
 
