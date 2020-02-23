@@ -8,6 +8,7 @@
     "perror",
     "pinfo",
     "pinfoc",
+    "pwarn",
     "sftp",
     "strftime"
   ]

@@ -28,6 +28,10 @@ def perror(*objects):
   "Print error message to stderr"
   print(*objects, file=sys.stderr)
 
+def pwarn(*objects):
+  "Print warning message to stderr"
+  print(*objects, file=sys.stderr)
+
 def pinfo(*objects):
   "Print info message to stdout"
   print(*objects, file=sys.stdout)
