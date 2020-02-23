@@ -57,16 +57,17 @@ def main():
     return 4
 
   # Loop routers and dump configuration
-  today = datetime.datetime.now()
-  today_str = today.strftime("%Y%m%d-%H%M%S")
   for rtr in cfg['routers']:
     e.pinfoc("Info: Backing up configuration of '%s'... " % rtr['name'])
-    local_exp_file = cfg['backup_dir'] + "/" + rtr['name'] + "_" + today_str + ".rsc"
 
     try:
       ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
       ros.login(rtr['username'], rtr['password'])
       ros.make_export()
+      today = datetime.datetime.now()
+      today_str = today.strftime("%Y%m%d-%H%M%S")
+      local_exp_file = cfg['backup_dir'] + "/" + rtr['name'] + "_" + today_str + ".rsc"
+      # TODO: Get remote file datetime?
       ros.get_export(local_exp_file)
       ros.close()
     except Exception as err:
