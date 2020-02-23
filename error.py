@@ -24,20 +24,38 @@
 from __future__ import print_function # requires python 2.6 or later
 import sys
 
+# TODO: Use termcolor or colorama
+class TermColors:
+  RED     = '\033[91m'
+  CYAN    = '\033[36m'
+  ORANGE  = '\033[33m'
+  NORMAL  = '\033[0m'
+
 def perror(*objects):
   "Print error message to stderr"
+  sys.stderr.write(TermColors.RED + "Error" + TermColors.NORMAL + ": ")
+  sys.stdout.flush()
   print(*objects, file=sys.stderr)
 
 def pwarn(*objects):
   "Print warning message to stderr"
+  sys.stderr.write(TermColors.ORANGE + "Warning" + TermColors.NORMAL + ": ")
+  sys.stdout.flush()
   print(*objects, file=sys.stderr)
 
 def pinfo(*objects):
   "Print info message to stdout"
+  sys.stdout.write(TermColors.CYAN + "Info" + TermColors.NORMAL + ": ")
+  sys.stdout.flush()
   print(*objects, file=sys.stdout)
 
-def pinfoc(*objects):
-  "Print info message without newline to stdout, so it could be continued"
+def pinfos(*objects):
+  "Start info message without newline to stdout, so it could be continued"
+  sys.stdout.write(TermColors.CYAN + "Info" + TermColors.NORMAL + ": ")
   sys.stdout.write(*objects)
   sys.stdout.flush()
+
+def pinfoe(*objects):
+  "End info message"
+  print(*objects, file=sys.stdout)
 
