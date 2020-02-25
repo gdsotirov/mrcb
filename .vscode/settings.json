@@ -13,5 +13,12 @@
     "pwarn",
     "sftp",
     "strftime"
-  ]
+  ],
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "all",
+  "files.exclude": {
+    "**/*.pyc": true,
+    "**/backup": true
+  },
+  "files.eol": "\n"
 }
