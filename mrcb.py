@@ -22,7 +22,7 @@
 # SOFTWARE.
 #
 
-import datetime, filecmp, glob, json, os, sys
+import datetime, glob, json, os, sys
 import error as e, routeros
 
 # Default configuration file location
@@ -100,10 +100,10 @@ def main():
 
     # compare with last configuration export if any
     if last_exp_file:
-      # TODO: Find way to exclude first line with export date and time
-      if filecmp.cmp(last_exp_file, local_exp_file, shallow=False):
-        e.pinfo("Kept (%s)." % last_exp_file)
-        os.remove(last_exp_file)
+      ros_exp = routeros.Export()
+      if ros_exp.same(last_exp_file, local_exp_file):
+        e.pinfoe("Kept (%s)." % last_exp_file)
+        os.remove(local_exp_file)
         continue
 
     e.pinfoe("Done (%s)." % local_exp_file)
