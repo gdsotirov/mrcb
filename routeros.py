@@ -21,7 +21,7 @@
 # SOFTWARE.
 #
 
-import paramiko, time
+import paramiko, re, time
 
 class SecureTransport:
   "SSH/SFTP to RouterOS device"
@@ -55,4 +55,30 @@ class SecureTransport:
   def close(self):
     "Close transport"
     self.pt.close()
+
+class Export:
+  "Export handling routines"
+  def skip_ln(self, line):
+    "Lines to skip from export"
+    if re.search("^#", line):
+      return True # skip comments
+    return False
+
+  def same(self, old_exp, new_exp):
+    "Compare whether two exports are the same"
+    oldexp = open(old_exp)
+    newexp = open(new_exp)
+
+    for old_exp_ln, new_exp_ln in zip(oldexp, newexp):
+      if self.skip_ln(old_exp_ln) or self.skip_ln(new_exp_ln):
+        continue
+      elif old_exp_ln != new_exp_ln:
+        oldexp.close()
+        newexp.close()
+        return False
+
+    oldexp.close()
+    newexp.close()
+
+    return True
 
