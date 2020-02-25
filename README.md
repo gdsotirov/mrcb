@@ -10,7 +10,7 @@ export file and then retrieves this file by SFTP.
 # Requirements
 
 The utility requires:
-  * [Python](https://www.python.org/) 2.6 or later;
+  * [Python](https://www.python.org/) 2.7 or later;
   * [Paramiko](https://www.paramiko.org/) 2.3 or later.
 
 # License
