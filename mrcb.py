@@ -35,7 +35,7 @@ def get_latest_export(pattern):
   files = glob.glob(DEF_BACKUPDIR + "/" + pattern)
   if files:
     # TODO: What if old export was changed recently?
-    return max(files, key=os.path.getctime)
+    return max(files, key=os.path.getmtime)
   else:
     return ''
 
