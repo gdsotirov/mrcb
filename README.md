@@ -4,8 +4,13 @@ Multi Router Configuration Backup is a utility to backup the configuration
 of multiple MikroTik devices on the network on a regular basis by keeping
 new configuration only if it differs from the last one.
 
+## How does it work?
+
 MRCB connects to remote MikroTik devices by SSH, executes command to generate
-export file and then retrieves this file by SFTP.
+export file and then retrieves this file by SFTP. It then compares the new
+export with the last backed up version excluding comments (i.e lines beginning
+with `#`). If exports are the same the new one is deleted preserving space and
+keeping history. Otherwise, the new version is preserved for reference.
 
 # Requirements
 
