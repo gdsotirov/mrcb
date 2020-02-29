@@ -1,5 +1,6 @@
 {
   "backup_dir": "./backup",
+  "backup_dir_per_device": true,
   "routers": [
     {"name"    : "router1",
      "hostname": "router1.example.net",

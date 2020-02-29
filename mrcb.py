@@ -30,9 +30,15 @@ MRCB_CONFIG = "config.json"
 # Default backup directory
 DEF_BACKUPDIR = './backup'
 
-def get_latest_export(bkp_dir, pattern):
+def get_latest_export(bkp_dir, per_device, dev_name):
   "Get name of latest export file by modification time"
-  files = glob.glob(bkp_dir + "/" + pattern)
+  if per_device:
+    glob_pattern = "%s/%s/%s_*.rsc" % (bkp_dir, dev_name, dev_name)
+  else:
+    glob_pattern = "%s/%s_*.rsc" % (bkp_dir, dev_name)
+
+  files = glob.glob(glob_pattern)
+
   if files:
     # TODO: What if old export was changed recently?
     return max(files, key=os.path.getmtime)
@@ -87,9 +93,22 @@ def main():
       ros.make_export()
       today = datetime.datetime.now()
       today_str = today.strftime("%Y%m%d-%H%M%S")
-      local_exp_file = cfg['backup_dir'] + "/" + rtr['name'] + "_" + today_str + ".rsc"
+
+      if cfg['backup_dir_per_device']:
+        dev_bkp_dir = "%s/%s" % (cfg['backup_dir'], rtr['name'])
+        if not os.path.exists(dev_bkp_dir):
+          try:
+            os.mkdir(dev_bkp_dir)
+          except Exception as err:
+            e.perror("Cannot create device backup directory '%s': %s" % (dev_bkp_dir, str(err)))
+        local_exp_file = "%s/%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], rtr['name'], today_str)
+      else:
+        local_exp_file = "%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], today_str)
+
       # get last export before new one is downloaded
-      last_exp_file = get_latest_export(cfg['backup_dir'], rtr['name'] + "_*.rsc")
+      last_exp_file = get_latest_export(cfg['backup_dir'],
+                                        cfg['backup_dir_per_device'],
+                                        rtr['name'])
       # TODO: Get remote file datetime?
       ros.get_export(local_exp_file)
       ros.close()
