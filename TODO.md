@@ -6,7 +6,6 @@ the basic functionality of the utility is ready:
 * mange exports with Git in a _private_ GitHub repository as an option
   to local directory;
 * configurable SSH authentication with key instead of password;
-* reports for different routers in different directories;
 * compression of the exports in local directory;
 * make binary backups together with plain text export when difference is
   detected (suggested by Boyan Sotirov);
