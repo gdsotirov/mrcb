@@ -30,9 +30,9 @@ MRCB_CONFIG = "config.json"
 # Default backup directory
 DEF_BACKUPDIR = './backup'
 
-def get_latest_export(pattern):
-  "Get name of latest export file by change time"
-  files = glob.glob(DEF_BACKUPDIR + "/" + pattern)
+def get_latest_export(bkp_dir, pattern):
+  "Get name of latest export file by modification time"
+  files = glob.glob(bkp_dir + "/" + pattern)
   if files:
     # TODO: What if old export was changed recently?
     return max(files, key=os.path.getmtime)
@@ -89,7 +89,7 @@ def main():
       today_str = today.strftime("%Y%m%d-%H%M%S")
       local_exp_file = cfg['backup_dir'] + "/" + rtr['name'] + "_" + today_str + ".rsc"
       # get last export before new one is downloaded
-      last_exp_file = get_latest_export(rtr['name'] + "_*.rsc")
+      last_exp_file = get_latest_export(cfg['backup_dir'], rtr['name'] + "_*.rsc")
       # TODO: Get remote file datetime?
       ros.get_export(local_exp_file)
       ros.close()
