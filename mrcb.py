@@ -95,6 +95,12 @@ def main():
       today_str = today.strftime("%Y%m%d-%H%M%S")
 
       if cfg['backup_dir_per_device']:
+        dev_bkp_dir = "%s/%s" % (cfg['backup_dir'], rtr['name'])
+        if not os.path.exists(dev_bkp_dir):
+          try:
+            os.mkdir(dev_bkp_dir)
+          except Exception as err:
+            e.perror("Cannot create device backup directory '%s': %s" % (dev_bkp_dir, str(err)))
         local_exp_file = "%s/%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], rtr['name'], today_str)
       else:
         local_exp_file = "%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], today_str)
