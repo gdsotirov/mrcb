@@ -22,13 +22,20 @@
 # SOFTWARE.
 #
 
-import datetime, glob, json, os, sys
+import datetime, glob, json, jsonschema, os, sys
 import error as e, routeros
 
 # Default configuration file location
 MRCB_CONFIG = "config.json"
 # Default backup directory
 DEF_BACKUPDIR = './backup'
+# Return error codes
+ERR_NO_ERROR            = 0
+ERR_CANNOT_OPEN_CONFIG  = 1
+ERR_CANNOT_PARSE_CONFIG = 2
+ERR_CANNOT_VAL_CONFIG   = 3
+ERR_CANNOT_CREATE_DIR   = 4
+ERR_NOT_A_DIR           = 5
 
 def get_latest_export(bkp_dir, per_device, dev_name):
   "Get name of latest export file by modification time"
@@ -45,26 +52,48 @@ def get_latest_export(bkp_dir, per_device, dev_name):
   else:
     return ''
 
-def main():
+def load_and_check_config(cfg_file):
+  "Loads and validates configuration, uses defaults where possible"
   # Open configuration file
   try:
-    cfg_file = open(MRCB_CONFIG, "r")
+    cfg_file = open(cfg_file, "r")
   except Exception as err:
     e.perror("Cannot open configuration file '%s': %s" % (MRCB_CONFIG, str(err)))
-    return 1
+    return ERR_CANNOT_OPEN_CONFIG, None
 
   # Load configuration
   try:
     cfg = json.load(cfg_file)
   except Exception as err:
-    e.perror("Cannot read configuration: %s" % str(err))
-    return 2
+    e.perror("Cannot parse configuration: %s" % str(err))
+    return ERR_CANNOT_PARSE_CONFIG, None
 
   cfg_file.close()
 
+  # Validate configuration against JSON schema
+  try:
+    with open("config.schema.json", "r") as cfg_schema_file:
+      cfg_schema = json.load(cfg_schema_file)
+      jsonschema.validate(cfg, cfg_schema)
+      cfg_schema_file.close()
+  except Exception as err:
+    e.perror("Cannot validate configuration: %s" % str(err))
+    return ERR_CANNOT_VAL_CONFIG, None
+
+  # Set values of optional configuration properties
   if not cfg.get('backup_dir'):
     e.pwarn("Using default backup directory '%s'. Please, check your configuration." % DEF_BACKUPDIR)
     cfg['backup_dir'] = DEF_BACKUPDIR
+
+  if not cfg.get('backup_dir_per_device'):
+    cfg['backup_dir_per_device'] = True
+
+  return ERR_NO_ERROR, cfg
+
+def main():
+  res, cfg = load_and_check_config(MRCB_CONFIG)
+  if ( res != ERR_NO_ERROR ):
+    return res
 
   # Check if backup directory exist and try to create it
   if not os.path.exists(cfg['backup_dir']):
@@ -73,14 +102,10 @@ def main():
       os.mkdir(cfg['backup_dir'])
     except Exception as err:
       e.perror("Cannot create backup directory '%s': %s" % (cfg['backup_dir'], str(err)))
-      return 3
+      return ERR_CANNOT_CREATE_DIR
   elif not os.path.isdir(cfg['backup_dir']):
     e.perror("Path '%s' set as 'backup_dir' is not a directory!" % cfg['backup_dir'])
-    return 4
-
-  if not cfg.get('routers'):
-    e.perror("No routers configured! Please, fix your configuration.")
-    return 5
+    return ERR_NOT_A_DIR
 
   # Loop routers
   for rtr in cfg['routers']:
