@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gdsotirov/mrcb/master/config.schema.json",
+  "title": "MRCB Configuration",
+  "description": "The schema for MRCB configuration validation",
+  "type": "object",
+  "properties": {
+    "backup_dir": {
+      "description": "The directory with export backups would be stored. It is ./backup by default",
+      "type": "string"
+    },
+    "backup_dir_per_device": {
+      "description": "Defines whether there should be directory per device in 'backup_dir'. True by default",
+      "type": "boolean"
+    },
+    "routers": {
+      "description": "List of devices to backup configuration from",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Short name for the device. Used also for per device directory name",
+            "type": "string"
+          },
+          "hostname": {
+            "description": "Fully qualified domain name (FQDN) or IP address for the device",
+            "type": "string"
+          },
+          "port": {
+            "description": "Port for SSH/SFTP connection",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "username": {
+            "description": "SSH/SFTP username",
+            "type": "string"
+          },
+          "password": {
+            "description": "SSH/SFT password",
+            "type": "string"
+          }
+        },
+        "required": ["name", "hostname", "username", "password"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["routers"],
+  "additionalProperties": false
+}
+
