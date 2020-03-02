@@ -126,6 +126,7 @@ def main():
             os.mkdir(dev_bkp_dir)
           except Exception as err:
             e.perror("Cannot create device backup directory '%s': %s" % (dev_bkp_dir, str(err)))
+            continue
         local_exp_file = "%s/%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], rtr['name'], today_str)
       else:
         local_exp_file = "%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], today_str)
