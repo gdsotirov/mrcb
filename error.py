@@ -1,6 +1,6 @@
 # Multi Router Configuration Backup (MRCB)
 # Functions to print error messages
-# Copyright (c) 2020 Georgi D. Sotirov
+# Copyright (c) 2020-2021 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,36 +22,32 @@
 #
 
 from __future__ import print_function # requires python 2.6 or later
+from colorama import init, Fore
 import sys
 
-# TODO: Use termcolor or colorama
-class TermColors:
-  RED     = '\033[91m'
-  CYAN    = '\033[36m'
-  ORANGE  = '\033[33m'
-  NORMAL  = '\033[0m'
+init(autoreset=True)
 
 def perror(*objects):
   "Print error message to stderr"
-  sys.stderr.write(TermColors.RED + "Error" + TermColors.NORMAL + ": ")
+  sys.stderr.write(Fore.RED + "Error" + Fore.RESET + ": ")
   sys.stdout.flush()
   print(*objects, file=sys.stderr)
 
 def pwarn(*objects):
   "Print warning message to stderr"
-  sys.stderr.write(TermColors.ORANGE + "Warning" + TermColors.NORMAL + ": ")
+  sys.stderr.write(Fore.YELLOW + "Warning" + Fore.RESET + ": ")
   sys.stdout.flush()
   print(*objects, file=sys.stderr)
 
 def pinfo(*objects):
   "Print info message to stdout"
-  sys.stdout.write(TermColors.CYAN + "Info" + TermColors.NORMAL + ": ")
+  sys.stdout.write(Fore.CYAN + "Info" + Fore.RESET + ": ")
   sys.stdout.flush()
   print(*objects, file=sys.stdout)
 
 def pinfos(*objects):
   "Start info message without newline to stdout, so it could be continued"
-  sys.stdout.write(TermColors.CYAN + "Info" + TermColors.NORMAL + ": ")
+  sys.stdout.write(Fore.CYAN + "Info" + Fore.RESET + ": ")
   sys.stdout.write(*objects)
   sys.stdout.flush()
 

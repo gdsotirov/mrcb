@@ -17,6 +17,7 @@ keeping history. Otherwise, the new version is preserved for reference.
 The utility requires:
   * [Python](https://www.python.org/) 2.7 or later;
   * [Paramiko](https://www.paramiko.org/) 2.3 or later;
+  * [colorama](https://github.com/tartley/colorama) 0.3.9 or later;
   * [jsonschema](https://github.com/Julian/jsonschema) 2.6 or later;
 
 # License
