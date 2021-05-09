@@ -151,12 +151,12 @@ def main():
     if last_exp_file:
       ros_exp = routeros.Export()
       if ros_exp.same(last_exp_file, local_exp_file):
-        e.pinfoe("Kept (%s)." % last_exp_file)
+        e.pinfoe("Kept (as '%s' is same)." % last_exp_file)
         os.remove(local_bkp_file)
         os.remove(local_exp_file)
         continue
 
-    e.pinfoe("Done (%s)." % local_exp_file)
+    e.pinfoe("Done (as '%s' is different from '%s')." % (local_exp_file, last_exp_file))
 
 exit(main())
 
