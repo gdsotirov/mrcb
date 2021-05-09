@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Multi Router Configuration Backup (MRCB)
-# Copyright (c) 2020 Georgi D. Sotirov
+# Copyright (c) 2020-2021 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -115,6 +115,7 @@ def main():
     try:
       ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
       ros.login(rtr['username'], rtr['password'])
+      ros.make_backup()
       ros.make_export()
       today = datetime.datetime.now()
       today_str = today.strftime("%Y%m%d-%H%M%S")
@@ -127,8 +128,10 @@ def main():
           except Exception as err:
             e.perror("Cannot create device backup directory '%s': %s" % (dev_bkp_dir, str(err)))
             continue
+        local_bkp_file = "%s/%s/%s_%s.backup" % (cfg['backup_dir'], rtr['name'], rtr['name'], today_str)
         local_exp_file = "%s/%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], rtr['name'], today_str)
       else:
+        local_bkp_file = "%s/%s_%s.backup" % (cfg['backup_dir'], rtr['name'], today_str)
         local_exp_file = "%s/%s_%s.rsc" % (cfg['backup_dir'], rtr['name'], today_str)
 
       # get last export before new one is downloaded
@@ -136,7 +139,8 @@ def main():
                                         cfg['backup_dir_per_device'],
                                         rtr['name'])
       # TODO: Get remote file datetime?
-      ros.get_export(local_exp_file)
+      ros.get_file('today.backup' , local_bkp_file)
+      ros.get_file('today.rsc'    , local_exp_file)
       ros.close()
     except Exception as err:
       e.pinfoe("Fail.")
@@ -148,6 +152,7 @@ def main():
       ros_exp = routeros.Export()
       if ros_exp.same(last_exp_file, local_exp_file):
         e.pinfoe("Kept (%s)." % last_exp_file)
+        os.remove(local_bkp_file)
         os.remove(local_exp_file)
         continue
 

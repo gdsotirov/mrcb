@@ -1,6 +1,6 @@
 # Multi Router Configuration Backup (MRCB)
 # Module for secure interaction with RouterOS devices
-# Copyright (c) 2020 Georgi D. Sotirov
+# Copyright (c) 2020-2021 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -47,10 +47,21 @@ class SecureTransport:
         break
       time.sleep(1)
 
-  def get_export(self, local_file):
+  def make_backup(self):
+    "Execute command to create backup file"
+    self.ssh = self.pt.open_session()
+    # See https://help.mikrotik.com/docs/display/ROS/Backup
+    self.ssh.exec_command('/system backup save name=today.backup')
+    # wait for the backup command to complete
+    while True:
+      if self.ssh.exit_status_ready():
+        break
+      time.sleep(1)
+
+  def get_file(self, remote_file, local_file):
     "Get remote file into local file"
     self.sftp = self.pt.open_sftp_client()
-    self.sftp.get('/today.rsc', local_file)
+    self.sftp.get(remote_file, local_file)
 
   def close(self):
     "Close transport"
