@@ -22,6 +22,5 @@
     "**/*.pyc": true,
     "**/backup": true
   },
-  "files.eol": "\n",
-  "python.pythonPath": "C:\\Python2\\python.exe"
+  "files.eol": "\n"
 }
