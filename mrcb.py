@@ -109,7 +109,7 @@ def main():
 
   # Loop routers
   for rtr in cfg['routers']:
-    e.pinfos("Backing up configuration of '%s'... " % rtr['name'])
+    e.pinfos("Backing up '%s'... " % rtr['name'])
 
     # export configuration
     try:
@@ -151,13 +151,14 @@ def main():
     if last_exp_file:
       ros_exp = routeros.Export()
       if ros_exp.same(last_exp_file, local_exp_file):
-        e.pinfoe("Kept (as '%s' is same)." % last_exp_file)
+        e.pinfoe("Kept (as '%s' is same)." % os.path.basename(last_exp_file))
         os.remove(local_bkp_file)
         os.remove(local_exp_file)
       else:
-        e.pinfoe("Done (as '%s' is different from '%s')." % (local_exp_file, last_exp_file))
+        e.pinfoe("Done (as '%s' is different from '%s')." %
+          (os.path.basename(local_exp_file), os.path.basename(last_exp_file)))
     else:
-      e.pinfoe("Done (as '%s' is initial)." % local_exp_file)
+      e.pinfoe("Done (as '%s' is initial)." % os.path.basename(local_exp_file))
 
     # clean up old system backups
     if os.path.exists(local_bkp_file) and os.path.isfile(local_bkp_file):
