@@ -154,9 +154,17 @@ def main():
         e.pinfoe("Kept (as '%s' is same)." % last_exp_file)
         os.remove(local_bkp_file)
         os.remove(local_exp_file)
-        continue
+      else:
+        e.pinfoe("Done (as '%s' is different from '%s')." % (local_exp_file, last_exp_file))
+    else:
+      e.pinfoe("Done (as '%s' is initial)." % local_exp_file)
 
-    e.pinfoe("Done (as '%s' is different from '%s')." % (local_exp_file, last_exp_file))
+    # clean up old system backups
+    if os.path.exists(local_bkp_file) and os.path.isfile(local_bkp_file):
+      for bkp_file in os.listdir(dev_bkp_dir):
+        if bkp_file.endswith(".backup"):
+          if ( os.path.join(dev_bkp_dir, bkp_file) != local_bkp_file ):
+            os.remove(os.path.join(dev_bkp_dir, bkp_file))
 
 exit(main())
 
