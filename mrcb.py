@@ -109,6 +109,8 @@ def main():
 
   # Loop routers
   for rtr in cfg['routers']:
+    old_backups = []
+
     e.pinfos("Backing up '%s'... " % rtr['name'])
 
     # export configuration
@@ -138,6 +140,7 @@ def main():
       last_exp_file = get_latest_export(cfg['backup_dir'],
                                         cfg['backup_dir_per_device'],
                                         rtr['name'])
+
       # TODO: Get remote file datetime?
       ros.get_file('today.backup' , local_bkp_file)
       ros.get_file('today.rsc'    , local_exp_file)
@@ -147,12 +150,18 @@ def main():
       e.perror("Cannot get configuration: %s" % str(err))
       continue
 
+    for bkp_file in os.listdir(dev_bkp_dir):
+      if bkp_file.endswith(".backup"):
+        if ( os.path.join(dev_bkp_dir, bkp_file) != local_bkp_file ):
+          old_backups.append(os.path.join(dev_bkp_dir, bkp_file))
+
     # compare with last configuration export if any
     if last_exp_file:
       ros_exp = routeros.Export()
       if ros_exp.same(last_exp_file, local_exp_file):
         e.pinfoe("Kept (as '%s' is same)." % os.path.basename(last_exp_file))
-        os.remove(local_bkp_file)
+        if len(old_backups) > 0:
+          os.remove(local_bkp_file)
         os.remove(local_exp_file)
       else:
         e.pinfoe("Done (as '%s' is different from '%s')." %
@@ -162,10 +171,8 @@ def main():
 
     # clean up old system backups
     if os.path.exists(local_bkp_file) and os.path.isfile(local_bkp_file):
-      for bkp_file in os.listdir(dev_bkp_dir):
-        if bkp_file.endswith(".backup"):
-          if ( os.path.join(dev_bkp_dir, bkp_file) != local_bkp_file ):
-            os.remove(os.path.join(dev_bkp_dir, bkp_file))
+      for old_bkp_file in old_backups:
+        os.remove(old_bkp_file)
 
 exit(main())
 
