@@ -31,32 +31,9 @@ class SecureTransport:
     self.port = port
     self.pt = paramiko.Transport((self.host, self.port))
 
-  def login(self, user, passwd):
-    "SSH login"
-    self.pt.connect(username = user, password = passwd)
-
-  def make_export(self):
-    "Execute command to create export file"
-    self.ssh = self.pt.open_session()
-    # Export only non-default configuration and hide secrets (i.e. passwords)
-    # See https://wiki.mikrotik.com/wiki/Manual:Configuration_Management
-    self.ssh.exec_command('/export file=today hide-sensitive compact')
-    # wait for the export command to complete
-    while True:
-      if self.ssh.exit_status_ready():
-        break
-      time.sleep(1)
-
-  def make_backup(self):
-    "Execute command to create backup file"
-    self.ssh = self.pt.open_session()
-    # See https://help.mikrotik.com/docs/display/ROS/Backup
-    self.ssh.exec_command('/system backup save name=today.backup')
-    # wait for the backup command to complete
-    while True:
-      if self.ssh.exit_status_ready():
-        break
-      time.sleep(1)
+  def close(self):
+    "Close transport"
+    self.pt.close()
 
   def get_backup(self, local_file):
     "Get system backup file"
@@ -71,17 +48,35 @@ class SecureTransport:
     self.sftp = self.pt.open_sftp_client()
     self.sftp.get(remote_file, local_file)
 
-  def close(self):
-    "Close transport"
-    self.pt.close()
+  def login(self, user, passwd):
+    "SSH login"
+    self.pt.connect(username = user, password = passwd)
+
+  def make_backup(self):
+    "Execute command to create backup file"
+    self.ssh = self.pt.open_session()
+    # See https://help.mikrotik.com/docs/display/ROS/Backup
+    self.ssh.exec_command('/system backup save name=today.backup')
+    # wait for the backup command to complete
+    while True:
+      if self.ssh.exit_status_ready():
+        break
+      time.sleep(1)
+
+  def make_export(self):
+    "Execute command to create export file"
+    self.ssh = self.pt.open_session()
+    # Export only non-default configuration and hide secrets (i.e. passwords)
+    # See https://wiki.mikrotik.com/wiki/Manual:Configuration_Management
+    self.ssh.exec_command('/export file=today hide-sensitive compact')
+    # wait for the export command to complete
+    while True:
+      if self.ssh.exit_status_ready():
+        break
+      time.sleep(1)
 
 class Export:
   "Export handling routines"
-  def skip_ln(self, line):
-    "Lines to skip from export"
-    if re.search("^#", line):
-      return True # skip comments
-    return False
 
   def same(self, old_exp, new_exp):
     "Compare whether two exports are the same"
@@ -100,4 +95,11 @@ class Export:
     newexp.close()
 
     return True
+
+  def skip_ln(self, line):
+    "Lines to skip from export"
+    if re.search("^#", line):
+      return True # skip comments
+
+    return False
 
