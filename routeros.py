@@ -21,12 +21,17 @@
 # SOFTWARE.
 #
 
-import paramiko, re, time
+import paramiko, random, re, string, time
 
 class SecureTransport:
   "SSH/SFTP to RouterOS device"
 
+  __RND_SEQ = string.ascii_uppercase + string.ascii_lowercase + string.digits
+
   def __init__(self, host, port):
+    self.__rnd_fname = 'mrcb_' + ''.join(random.choice(self.__RND_SEQ) for _ in range(7))
+    self.__bkp_fname = self.__rnd_fname + '.backup'
+    self.__exp_fname = self.__rnd_fname + '.rsc'
     self.host = host
     self.port = port
     self.pt = paramiko.Transport((self.host, self.port))
@@ -37,11 +42,11 @@ class SecureTransport:
 
   def get_backup(self, local_file):
     "Get system backup file"
-    self.get_file('today.backup', local_file)
+    self.get_file(self.__bkp_fname, local_file)
 
   def get_export(self, local_file):
     "Get export file"
-    self.get_file('today.rsc', local_file)
+    self.get_file(self.__exp_fname, local_file)
 
   def get_file(self, remote_file, local_file):
     "Get remote file into local file"
@@ -56,7 +61,7 @@ class SecureTransport:
     "Execute command to create backup file"
     self.ssh = self.pt.open_session()
     # See https://help.mikrotik.com/docs/display/ROS/Backup
-    self.ssh.exec_command('/system backup save name=today.backup')
+    self.ssh.exec_command('/system backup save name=%s' % self.__bkp_fname)
     # wait for the backup command to complete
     while True:
       if self.ssh.exit_status_ready():
@@ -68,7 +73,7 @@ class SecureTransport:
     self.ssh = self.pt.open_session()
     # Export only non-default configuration and hide secrets (i.e. passwords)
     # See https://wiki.mikrotik.com/wiki/Manual:Configuration_Management
-    self.ssh.exec_command('/export file=today hide-sensitive compact')
+    self.ssh.exec_command('/export file=%s hide-sensitive compact' % self.__exp_fname)
     # wait for the export command to complete
     while True:
       if self.ssh.exit_status_ready():
