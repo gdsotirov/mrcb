@@ -12,11 +12,12 @@ only if new export differs from the last one that was preserved in the same way.
 
 ## How does it work?
 
-MRCB connects to remote MikroTik devices via SSH, executes the necessary
-commands to generate system backup (`today.backup`) and configuration export
-(`today.rsc`) files and then retrieves these files by SFTP. It then compares
+MRCB connects to remote MikroTik devices via SSH and executes the necessary
+commands to generate system backup (`mrcb_#######.backup`) and configuration
+export (`mrcb_#######.rsc`) files (where `#` is random lowercase or uppercase
+ASCII letter or digit). It then retrieves these files by SFTP and compares
 the new export with the last backed up version excluding comments (i.e. lines
-beginning with `#`). If exports are the same the new export and backup files
+beginning with `#`). If exports are the same the new backup and export files
 are deleted preserving disk space and keeping history of changes clean.
 Otherwise, the new export and backup are preserved for reference and quick
 restore, respectively.
