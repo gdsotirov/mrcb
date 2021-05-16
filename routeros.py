@@ -58,6 +58,14 @@ class SecureTransport:
         break
       time.sleep(1)
 
+  def get_backup(self, local_file):
+    "Get system backup file"
+    self.get_file('today.backup', local_file)
+
+  def get_export(self, local_file):
+    "Get export file"
+    self.get_file('today.rsc', local_file)
+
   def get_file(self, remote_file, local_file):
     "Get remote file into local file"
     self.sftp = self.pt.open_sftp_client()

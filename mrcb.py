@@ -142,8 +142,8 @@ def main():
                                         rtr['name'])
 
       # TODO: Get remote file datetime?
-      ros.get_file('today.backup' , local_bkp_file)
-      ros.get_file('today.rsc'    , local_exp_file)
+      ros.get_backup(local_bkp_file)
+      ros.get_export(local_exp_file)
       ros.close()
     except Exception as err:
       e.pinfoe("Fail.")
