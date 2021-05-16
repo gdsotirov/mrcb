@@ -1,2 +1,4 @@
-paramiko>=2.3.3
+colorama>=0.3.9
 jsonschema>=2.6
+paramiko>=2.3.3
+
