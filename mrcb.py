@@ -144,6 +144,7 @@ def main():
       # TODO: Get remote file datetime?
       ros.get_backup(local_bkp_file)
       ros.get_export(local_exp_file)
+      ros.cleanup()
       ros.close()
     except Exception as err:
       e.pinfoe("Fail.")

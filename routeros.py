@@ -21,7 +21,7 @@
 # SOFTWARE.
 #
 
-import paramiko, random, re, string, time
+import paramiko, random, re, stat, string, time
 
 class SecureTransport:
   "SSH/SFTP to RouterOS device"
@@ -35,6 +35,15 @@ class SecureTransport:
     self.host = host
     self.port = port
     self.pt = paramiko.Transport((self.host, self.port))
+
+  def cleanup(self):
+    for file in [self.__bkp_fname, self.__exp_fname]:
+      try:
+        if stat.S_ISREG(self.sftp.stat(file).st_mode):
+          self.sftp.remove(file)
+      except IOError as e:
+        if e.errno == 2 and e.strerror == "No such file or directory":
+          pass
 
   def close(self):
     "Close transport"
