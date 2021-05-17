@@ -59,7 +59,10 @@ class SecureTransport:
 
   def get_file(self, remote_file, local_file):
     "Get remote file into local file"
-    self.sftp = self.pt.open_sftp_client()
+    try:
+      self.sftp
+    except AttributeError as e:
+      self.sftp = self.pt.open_sftp_client()
     self.sftp.get(remote_file, local_file)
 
   def login(self, user, passwd):
