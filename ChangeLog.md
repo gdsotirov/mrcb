@@ -1,3 +1,8 @@
+2021-06-?? _2021.06_
+------------------------------------------------------------------------------
+* _Change_: Reuse SFTP connection for downloading files (see
+  [#6](https://github.com/gdsotirov/mrcb/issues/6);
+
 2021-05-16 _2021.05_
 ------------------------------------------------------------------------------
 * _New_: Make binary backups and preserve only the one from the last
