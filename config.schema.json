@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/gdsotirov/mrcb/master/config.schema.json",
   "title": "MRCB Configuration",
   "description": "The schema for MRCB configuration validation",
@@ -40,9 +40,13 @@
           "password": {
             "description": "SSH/SFT password",
             "type": "string"
+          },
+          "priv_key": {
+            "description": "Path to SSH private key to use as identity",
+            "type": "string"
           }
         },
-        "required": ["name", "hostname", "username", "password"],
+        "required": ["name", "hostname", "username"],
         "additionalProperties": false
       },
       "minItems": 1

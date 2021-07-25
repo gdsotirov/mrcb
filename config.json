@@ -11,8 +11,8 @@
     {"name"    : "router2",
      "hostname": "router2.example.net",
      "port"    : 2223,
-     "username": "user2",
-     "password": "password2"
+     "username": "mrcb",
+     "priv_key": "/home/user2/.ssh/mrcb"
     }
   ]
 }
