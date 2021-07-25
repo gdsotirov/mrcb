@@ -116,7 +116,17 @@ def main():
     # export configuration
     try:
       ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
-      ros.login(rtr['username'], rtr['password'])
+
+      try:
+        login_pass = rtr['password']
+      except KeyError as err:
+        login_pass = None
+        try:
+          priv_key_f = rtr['priv_key']
+        except KeyError as err:
+          priv_key_f = None
+
+      ros.login(rtr['username'], login_pass, priv_key_f)
       ros.make_backup()
       ros.make_export()
       today = datetime.datetime.now()

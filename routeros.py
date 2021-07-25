@@ -65,9 +65,15 @@ class SecureTransport:
       self.sftp = self.pt.open_sftp_client()
     self.sftp.get(remote_file, local_file)
 
-  def login(self, user, passwd):
+  def login(self, user, passwd, priv_key):
     "SSH login"
-    self.pt.connect(username = user, password = passwd)
+    if priv_key != None:
+      key = paramiko.RSAKey.from_private_key_file(priv_key)
+      self.pt.connect(username = user, pkey = key)
+    elif passwd != None:
+      self.pt.connect(username = user, password = passwd)
+    else:
+      raise Exception("No password or private key provided.")
 
   def make_backup(self):
     "Execute command to create backup file"
