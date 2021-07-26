@@ -1,0 +1,29 @@
+---
+- name: Configure a MikroTik device for backup
+  hosts: routers
+
+  tasks:
+    # See https://help.mikrotik.com/docs/display/ROS/User#User-UserGroups
+    # Apparently in order to execute /system backup the combination of policy
+    # and test policies is necessary otherwise there is the error:
+    #   Failed to save system configuration backup
+    #   not enough permissions (9)
+    # For /export the necessary policies are ftp and write while sensitive
+    # dos not block using argument hide-sensitive.
+    - name: Create backup group
+      shell: |
+        /user group add name=Backup comment="Backup users group" policy=ssh,ftp,read,write,policy,test,sensitive skin=default
+
+    - name: Create mrcb user
+      shell: |
+        /user add name=mrcb group=Backup
+
+    - name: Upload public SSH key for mrcb user
+      copy:
+        src: ~/.ssh/mrcb.pub
+        dest: mrcb.pub
+
+    - name: Instal public SSH key for mrcb user
+      shell: |
+        /user ssh-keys import user=mrcb public-key-file=mrcb.pub
+
