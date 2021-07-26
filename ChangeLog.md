@@ -1,5 +1,7 @@
-2021-06-?? _2021.06_
+2021-07-?? _2021.07_
 ------------------------------------------------------------------------------
+* _New_: SSH authentication with private key (see
+  [#7](https://github.com/gdsotirov/mrcb/issues/7)
 * _Change_: Reuse SFTP connection for downloading files (see
   [#6](https://github.com/gdsotirov/mrcb/issues/6);
 
