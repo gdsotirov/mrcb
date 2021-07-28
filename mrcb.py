@@ -113,6 +113,9 @@ def main():
 
     e.pinfos("Backing up '%s'... " % rtr['name'])
 
+    login_pass = None
+    priv_key_f = None
+
     # export configuration
     try:
       ros = routeros.SecureTransport(rtr['hostname'], rtr['port'])
