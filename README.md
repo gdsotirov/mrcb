@@ -25,7 +25,7 @@ restore, respectively.
 # Requirements
 
 The utility requires:
-  * [Python](https://www.python.org/) 2.7 or later;
+  * [Python](https://www.python.org/) 3 or later;
   * [Paramiko](https://www.paramiko.org/) 2.3 or later;
   * [colorama](https://github.com/tartley/colorama) 0.3.9 or later;
   * [jsonschema](https://github.com/Julian/jsonschema) 2.6 or later.
