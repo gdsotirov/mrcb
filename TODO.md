@@ -12,5 +12,5 @@ the basic functionality of the utility is ready:
 * check and remove sensitive data in exports (i.e. as complement to
   hide-sensitive option of /export command);
 * e-mail notifications about successful/unsuccessful backups;
-* Python 3 support.
+* ~~Python 3 support~~.
 
