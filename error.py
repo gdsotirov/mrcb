@@ -1,6 +1,6 @@
 # Multi Router Configuration Backup (MRCB)
 # Functions to print error messages
-# Copyright (c) 2020-2021 Georgi D. Sotirov
+# Copyright (c) 2020-2022 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,6 @@
 # SOFTWARE.
 #
 
-from __future__ import print_function # requires python 2.6 or later
 from colorama import init, Fore
 import sys
 
