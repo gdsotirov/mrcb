@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Multi Router Configuration Backup (MRCB)
-# Copyright (c) 2020-2021 Georgi D. Sotirov
+# Copyright (c) 2020-2022 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 # SOFTWARE.
 #
 
-import datetime, glob, json, jsonschema, os, sys
+import datetime, glob, json, jsonschema, os
 import error as e, routeros
 
 # Default configuration file location
