@@ -1,12 +1,12 @@
 {
   "cSpell.words": [
     "Boyan",
+    "colorama",
+    "filecmp",
     "FQDN",
     "Georgi",
-    "MRCB",
     "Mikro",
-    "Sotirov",
-    "filecmp",
+    "MRCB",
     "paramiko",
     "perror",
     "pinfo",
@@ -14,6 +14,7 @@
     "pinfos",
     "pwarn",
     "sftp",
+    "Sotirov",
     "strftime"
   ],
   "editor.tabSize": 2,
