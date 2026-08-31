@@ -1,6 +1,6 @@
 # Multi Router Configuration Backup (MRCB)
 # Functions to print error messages
-# Copyright (c) 2020-2022 Georgi D. Sotirov
+# Copyright (c) 2020-2026 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
