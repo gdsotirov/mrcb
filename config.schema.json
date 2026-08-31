@@ -19,6 +19,10 @@
       "items": {
         "type": "object",
         "properties": {
+          "enabled": {
+            "description": "Defines whether the device is enabled for backup. True by default",
+            "type": "boolean"
+          },
           "name": {
             "description": "Short name for the device. Used also for per device directory name",
             "type": "string"
