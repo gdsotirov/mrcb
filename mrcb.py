@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # Multi Router Configuration Backup (MRCB)
-# Copyright (c) 2020-2022 Georgi D. Sotirov
+# Copyright (c) 2020-2026 Georgi D. Sotirov
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -111,7 +111,11 @@ def main():
   for rtr in cfg['routers']:
     old_backups = []
 
-    e.pinfos("Backing up '%s'... " % rtr['name'])
+    if rtr.get('enabled', True):
+      e.pinfos("Backing up '%s'... " % rtr['name'])
+    else:
+      e.pinfoe("Skipping '%s' (as disabled in configuration)." % rtr['name'])
+      continue
 
     login_pass = None
     priv_key_f = None
