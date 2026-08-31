@@ -1,6 +1,6 @@
 2026-08-31 _2026.08_
 ------------------------------------------------------------------------------
-* _New_: Possiblity to disable backup per device (see
+* _New_: Possibility to disable backup per device (see
   [#9](https://github.com/gdsotirov/mrcb/issues/9))
 
 2022-02-15 _2022.02_
